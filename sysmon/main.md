@@ -4,3 +4,7 @@ https://www.blackhillsinfosec.com/getting-started-with-sysmon/
 
 https://github.com/SwiftOnSecurity/sysmon-config/blob/master/sysmonconfig-export.xml
 
+https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
+
+
+
