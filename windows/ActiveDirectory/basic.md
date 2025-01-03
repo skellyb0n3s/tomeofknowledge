@@ -68,3 +68,55 @@
 
 ## Functional Levels
 TODO - `https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc754918(v=ws.10)?redirectedfrom=MSDN`
+
+
+## Kerberos
+- password converted to NTLM hash (KRB_AS_REQ) (Request TGT)
+- DC checks AS-REQ, responds with TGT (KRB_AS_REP)
+- User presents TGT to request TGS (KRB_TGS_REQ)
+- Server encrypts TGS with NTLM of the target service (KRB_TGS_REP)
+
+
+## DNS
+* DC maintains DNS records via service records (SRV)
+    - allows you to find file server, printer, DC, etc
+* Dynamic DNS to make changes
+* Client locates DC by sending query to the dns service
+    - recieves srv record from the dns database.
+## RPC
+* interprocess client/server remote procedure calls (MSRPC)
+* AD uses 4
+    - lsarpc
+        - Local Security Authority (loacl sec policy, audit policy, interactive auth, domain sec policies)
+    - Netlogon
+        - authenticate users/services in domain
+    - Remote SAM (samr)
+        - management of domain account database (users/groups). 
+        - Example: Bloodhound 
+    - drsuapi
+        - Directory Replication Service (DRS) Remote Protocol
+        - this is how NTDS.dit copying can be done
+
+
+## Local Accounts
+* Administrator - Windows 10 and Server 2016 hosts disable the built-in administrator account by default   
+    - it creates another local account in the local administrator's group during setup.
+* Network Service
+    - predefined local account used by the Service Control Manager (SCM) 
+    - When a service runs in the context of this particular account, it will present credentials to remote services.
+
+* Local Service
+    - predefined local account used by the Service Control Manager (SCM) for running Windows services. 
+    - configured with minimal privileges on the computer and presents anonymous credentials to the network.
+
+## Groups/OUS
+* Groups are primarily used to assign permissions to access resources. OUs can also be used to delegate administrative tasks to a user, such as resetting passwords or unlocking user accounts without giving them additional admin rights that they may inherit through group membership.
+
+* distribution vs security group (former is like email, latter is for permissions)
+* Scopes
+    - local
+        - Domain local groups can only be used to manage permissions to domain resources in the domain where it was created. Local groups cannot be used in other domains but CAN contain users from OTHER domains. Local groups can be nested into (contained within) other local groups but NOT within global groups.
+    - domain
+        - Global groups can be used to grant access to resources in another domain. A global group can only contain accounts from the domain where it was created. Global groups can be added to both other global groups and local groups.
+    - global
+        - The universal group scope can be used to manage resources distributed across multiple domains and can be given permissions to any object within the same forest. They are available to all domains within an organization and can contain users from any domain. Unlike domain local and global groups, universal groups are stored in the Global Catalog (GC), and adding or removing objects from a universal group triggers forest-wide replication
